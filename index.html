@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presigna — Partnering Intelligence</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }, colors: { brand: '#7B61FF' } } }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    .font-display { font-family: 'DM Sans', system-ui, sans-serif; letter-spacing: -0.01em; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0D0D12; }
+    ::-webkit-scrollbar-thumb { background: #1F1F29; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #7B61FF; }
+  </style>
+</head>
+<body class="min-h-screen bg-[#0D0D12] text-slate-300 antialiased selection:bg-[#7B61FF]/30 selection:text-white">
+
+  <nav class="px-6 py-5 flex items-center justify-between sticky top-0 bg-[#0D0D12]/85 backdrop-blur-xl z-20 border-b border-white/5">
+    <div class="w-10"></div>
+    <span class="absolute left-1/2 -translate-x-1/2 font-display text-[1.2rem] font-bold text-white tracking-tight select-none">
+      presigna<span class="text-[#7B61FF] text-xl leading-none">.</span>
+    </span>
+    <div class="flex items-center gap-4">
+      <a href="mailto:contact@presigna.com" class="text-sm font-medium text-gray-400 hover:text-white transition-colors hidden sm:block">Contact</a>
+    </div>
+  </nav>
+
+  <main class="max-w-md mx-auto px-6 pt-16 pb-24 space-y-10">
+    <header class="flex flex-col items-center text-center space-y-5">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-gray-300 text-xs font-semibold">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#7B61FF] animate-pulse"></span>
+        Closed Beta Access
+      </div>
+      <h1 class="font-display text-4xl sm:text-5xl font-black leading-[1.1] tracking-tight">
+        Dominate <br/>
+        <span class="text-[#7B61FF]">BIO KOREA 2026</span>
+      </h1>
+      <p class="text-gray-400 text-sm max-w-[280px] font-medium leading-relaxed">
+        Enter your details to unlock exclusive partner intelligence and clinical trackers.
+      </p>
+    </header>
+
+    <div class="bg-[#16161D] rounded-[28px] p-8 border border-white/10 shadow-2xl relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-[#7B61FF]/10 blur-[50px] rounded-full -mr-10 -mt-10 pointer-events-none"></div>
+      
+      <form id="beta-form" class="space-y-6 relative z-10" novalidate>
+        <div class="space-y-4">
+          <div class="space-y-2">
+            <label for="name" class="text-[11px] font-bold text-gray-500 uppercase tracking-widest ml-1 block">Full Name</label>
+            <div class="relative flex items-center">
+              <i data-lucide="user" class="absolute left-4 w-5 h-5 text-gray-500"></i>
+              <input type="text" id="name" placeholder="John Doe" class="w-full bg-[#0D0D12] border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-sm focus:outline-none focus:border-[#7B61FF] focus:ring-1 focus:ring-[#7B61FF] transition-all placeholder:text-gray-700 font-medium text-white" required>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label for="email" class="text-[11px] font-bold text-gray-500 uppercase tracking-widest ml-1 block">Work Email</label>
+            <div class="relative flex items-center">
+              <i data-lucide="mail" class="absolute left-4 w-5 h-5 text-gray-500"></i>
+              <input type="email" id="email" placeholder="john@company.com" class="w-full bg-[#0D0D12] border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-sm focus:outline-none focus:border-[#7B61FF] focus:ring-1 focus:ring-[#7B61FF] transition-all placeholder:text-gray-700 font-medium text-white" required>
+            </div>
+          </div>
+        </div>
+        <p id="form-error" class="text-red-400 text-xs font-medium px-1 hidden"></p>
+        <button type="submit" id="submit-btn" class="w-full bg-[#7B61FF] hover:bg-[#6a50ee] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#7B61FF]/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-sm">
+          Claim Your Free Access Now
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+
+      // 세션 유지 체크
+      try {
+        if (localStorage.getItem('presigna_user')) {
+          window.location.href = 'step2.html';
+          return;
+        }
+      } catch (e) {
+        console.warn('LocalStorage is blocked by browser settings.');
+      }
+
+      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx2O22ViMQtwS16wlYEZhKHU7tJNuuYzTYfTi4y3LAh7zzfCUtn163WayDvoMoNQWnLSQ/exec';
+      const form = document.getElementById('beta-form');
+      const errorEl = document.getElementById('form-error');
+      const btn = document.getElementById('submit-btn');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorEl.classList.add('hidden');
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+
+        if (!name) { 
+          errorEl.textContent = 'Please enter your full name.'; 
+          errorEl.classList.remove('hidden'); 
+          return; 
+        }
+        if (!email || !emailRegex.test(email)) { 
+          errorEl.textContent = 'Please enter a valid work email address.'; 
+          errorEl.classList.remove('hidden'); 
+          return; 
+        }
+
+        // 버튼 로딩 UI 전환
+        const originalBtnHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<svg class="animate-spin w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>';
+
+        // LocalStorage 저장
+        try {
+          localStorage.setItem('presigna_user', JSON.stringify({ name, email, timestamp: new Date().toISOString() }));
+        } catch (err) {
+          console.warn('Could not save user session.');
+        }
+
+        // Google Sheets API 호출 (URLSearchParams 활용)
+        try {
+          await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ name, email }).toString()
+          });
+        } catch (error) {
+          console.error('Network Error:', error);
+          // 네트워크 에러 처리를 고도화하려면 여기에 Fallback UI 추가 가능
+        } finally {
+          window.location.href = 'step2.html';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
